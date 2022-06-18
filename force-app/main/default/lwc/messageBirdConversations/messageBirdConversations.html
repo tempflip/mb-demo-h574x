@@ -1,0 +1,22 @@
+<template>
+    <template if:false={conversationSelected}>
+        <template for:each={conversationList} for:item="conversation">
+            <div key={conversation.id}>
+                Chat with {conversation.contact.displayName}
+                <lightning-button value={conversation.id} onclick={onConversationSelectClick} label="Select"></lightning-button>
+            </div>
+        </template>
+    </template>
+
+    <template if:true={conversationSelected}>
+        <div>
+            <lightning-button label="Back" onclick={onBackClick}></lightning-button>
+        </div>
+        <c-message-bird-conversation-messages 
+            conversation-id={conversationId}
+            channel-id={channelId}
+            contact-id={contactId}
+        ></c-message-bird-conversation-messages>
+    </template>
+
+</template>

@@ -13,27 +13,32 @@ public with sharing class MessageBird {
     }
 
     public class PaginatedConversations extends Paginated {
-        Conversation[] items;
+        @AuraEnabled public Conversation[] items;
     }
 
     public class PaginatedMessages extends Paginated {
-        Message[] items;
+        @AuraEnabled public Message[] items;
+        @AuraEnabled public Channel[] channels;
     }
 
     public class Conversation {
-        public String id;
-        public String contactId;
+        @AuraEnabled public String id;
+        @AuraEnabled public String contactId;
+        @AuraEnabled public MessageBirdContact contact;
+        @AuraEnabled public DateTime createdDatetime;
+        @AuraEnabled public DateTime updatedDatetime;
+        @AuraEnabled public Channel[] channels;
     }
 
     public class Message {
-        public String id;
+        @AuraEnabled public String id;
         public String conversationId;                
-        public String channelId;                
-        public String direction;
-        public String xfrom;
-        public String to;
+        @AuraEnabled public String channelId;                
+        @AuraEnabled public String direction;
+        @AuraEnabled public String xfrom;
+        @AuraEnabled public String to;
         public String type;
-        public MessageContent content;
+        @AuraEnabled public MessageContent content;
 
         public Message(String to, String xfrom, String text) {
             this.to = to;
@@ -44,7 +49,7 @@ public with sharing class MessageBird {
     }
 
     public class MessageContent {
-        public String text;
+        @AuraEnabled public String text;
 
         public MessageContent(String text) {
             this.text = text;
@@ -54,6 +59,16 @@ public with sharing class MessageBird {
     public class MessageResponse {
         public String id;
         public String status;
+    }
+
+    public class Channel {
+        @AuraEnabled public String id;
+    }
+
+    public class MessageBirdContact {
+        @AuraEnabled public String id;
+        @AuraEnabled public String msisdn;
+        @AuraEnabled public String displayName;
     }
 
 }

@@ -11,6 +11,10 @@ public with sharing class HttpHelper {
         return HttpReq(endpoint, 'POST', body);
     }
 
+    public static String HttpPATCH(String endpoint, String body) {
+        return HttpReq(endpoint, 'PATCH', body);
+    }
+
     private static String HttpReq(String endpoint, String method, String body) {
         Http http = new Http();
         HttpRequest request = new HttpRequest();
@@ -23,7 +27,7 @@ public with sharing class HttpHelper {
         HttpResponse response = http.send(request);
         system.debug('#############################' + response.getStatusCode());
         system.debug('#############################' + response.getBody());
-        if (response.getStatusCode() == 200) {
+        if (response.getStatusCode() >= 200 && response.getStatusCode() <= 299) {
             return response.getBody();
         }
         throw new HttpHelperException('HTTP error: ' + response.getStatusCode() + ' |||| ' + response.getBody());

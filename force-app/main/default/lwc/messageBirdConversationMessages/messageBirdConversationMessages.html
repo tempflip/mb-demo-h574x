@@ -1,0 +1,37 @@
+<template>
+    <section role="log" class="slds-chat">
+        <ul class="slds-chat-list">
+            channel: {channelId}<br>
+            contact: {contactId}<br>
+            conversation: {conversationId}<br>
+
+            <template for:each={messageArray} for:item="message">
+                <li class="slds-chat-listitem slds-chat-listitem_inbound" key={message.id}>
+                        <div class="slds-chat-message">
+                            <div class="slds-chat-message__body">
+                        
+                                <div if:true={message.isInbound} class="slds-chat-message__text slds-chat-message__text_inbound">
+                                    <span>{message.content.text}</span>
+                                    <div>
+                                        {message.from}
+                                    </div>
+                                </div>
+
+                                <div if:false={message.isInbound} class="slds-chat-message__text slds-chat-message__text_outbound">
+                                    <span>{message.content.text}</span>                                                             
+                                </div>
+
+                            </div>
+                        </div>
+                </li>
+            </template>
+        </ul>
+    </section>
+
+
+    <div>
+        {messageText}
+        <input class="agentMessage">
+        <lightning-button label="Send" onclick={sendMessage} disabled={sendButtondisabled}></lightning-button>
+    </div>
+</template>
