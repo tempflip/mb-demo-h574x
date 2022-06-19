@@ -1,9 +1,10 @@
 import { LightningElement, wire, api } from 'lwc';
+import { refreshApex } from '@salesforce/apex';
 import getConversationMessages from '@salesforce/apex/MessageBirdConversationController.getConversationMessages';
 import sendMessage from '@salesforce/apex/MessageBirdConversationController.sendMessage';
 
 export default class MessageBirdConverastionMessages extends LightningElement {
-    @api conversationId; // = '22bcc0e502e04903935a419738660b18';
+    @api conversationId;
     @api channelId;
     @api contactId;
 
@@ -11,7 +12,6 @@ export default class MessageBirdConverastionMessages extends LightningElement {
 
     get messageArray() {
         if (!this.conversation.data) return [];
-        console.log(';;;', this.conversation.data);
         return [...this.conversation.data.items]
                     .reverse()
                     .map(el => ({...el, isInbound : el.direction === 'received'}))
@@ -19,7 +19,6 @@ export default class MessageBirdConverastionMessages extends LightningElement {
     }
 
     sendMessage(event) {
-        console.log('##');
         const messageText = this.template.querySelector('.agentMessage').value;
         sendMessage({
                 to  : this.contactId,
@@ -28,6 +27,7 @@ export default class MessageBirdConverastionMessages extends LightningElement {
             }).then(r => {
                 console.log('looks good!', r);
                 this.template.querySelector('.agentMessage').value = null;
+                refreshApex(this.conversation)
             }).catch(err => {
                 console.log('st went wrong', err);
             })

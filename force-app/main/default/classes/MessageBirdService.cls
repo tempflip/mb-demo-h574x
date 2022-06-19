@@ -27,6 +27,15 @@ public with sharing class MessageBirdService {
         );
     }
 
+    public static MessageBird.Conversation startConversation(MessageBird.Message payload) {
+        payload.channelId = payload.xfrom;
+        payload.xfrom = null;
+        return (MessageBird.Conversation) JSON.deserialize(
+            HttpHelper.HttpPOST(baseURL + '/conversations/start', xfrom_to_from(JSON.serialize(payload))),
+            MessageBird.Conversation.class
+        );
+    }
+
     public static MessageBird.Conversation archiveConversation(String conversationId) {
         Map<String, String> payload = new Map<String, String>{'status' => 'archived'};
         return (MessageBird.Conversation) JSON.deserialize(
